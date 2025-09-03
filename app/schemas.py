@@ -27,3 +27,4 @@ class UserReadDTO(BaseModel):
     id: int
     username: str
     email: EmailStr
+    
