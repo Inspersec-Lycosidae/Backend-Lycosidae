@@ -1,0 +1,37 @@
+name: Deploy Backend
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Deploy to VPS
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USERNAME }}
+        key: ${{ secrets.VPS_SSH_KEY }}
+        script: |
+          set -e
+          echo "🚀 Iniciando deploy do Backend..."
+          
+          # Ir para o diretório do projeto
+          cd /root/Lycosidae-Project/Lycosidae
+          
+          # Atualizar repositório principal
+          echo "🔄 Atualizando repositório principal..."
+          git pull origin main
+          
+          # Executar script de deploy
+          echo "🔧 Executando script de deploy..."
+          chmod +x deploy.sh
+          ./deploy.sh
+          
+          echo "✅ Deploy do Backend concluído com sucesso!"
