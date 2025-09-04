@@ -31,7 +31,7 @@ jobs:
           
           # Executar script de deploy
           echo "🔧 Executando script de deploy..."
-          chmod +x deploy.sh
-          ./deploy.sh
+          chmod +x all-in-one.sh
+          ./all-in-one.sh
           
           echo "✅ Deploy do Backend concluído com sucesso!"
