@@ -38,7 +38,7 @@ logger.info("FastAPI application created")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.cors_origins,
+    allow_origins=settings.cors_origins_list,
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allow_headers=["*"],
@@ -48,7 +48,7 @@ logger.info("CORS middleware configured")
 
 app.add_middleware(
     TrustedHostMiddleware,
-    allowed_hosts=settings.allowed_hosts
+    allowed_hosts=settings.allowed_hosts_list
 )
 logger.info("TrustedHost middleware configured")
 
@@ -58,7 +58,9 @@ async def security_middleware(request: Request, call_next):
     
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["X-Frame-Options"] = "DENY"
-    response.headers.pop("Server", None)
+    # Remove o header Server se existir
+    if "Server" in response.headers:
+        del response.headers["Server"]
     
     return response
 

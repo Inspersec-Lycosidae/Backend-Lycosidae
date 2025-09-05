@@ -38,6 +38,8 @@ def sanitize_request_data(data: Any) -> Any:
     elif isinstance(data, list):
         return [sanitize_request_data(item) for item in data]
     elif isinstance(data, str):
-        return SecurityUtils.sanitize_input(data)
+        # Usar InputValidator.sanitize_input em vez de SecurityUtils.sanitize_input
+        from .security.validation import InputValidator
+        return InputValidator.sanitize_input(data)
     else:
         return data

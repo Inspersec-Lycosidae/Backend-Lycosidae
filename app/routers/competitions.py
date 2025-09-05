@@ -8,14 +8,14 @@ try:
     from ..logger import get_logger
     from ..rate_limiter import rate_limit_middleware
     from ..exceptions import ValidationException, ExternalServiceException
-    from ..security import SecurityUtils
+    from ..security.validation import InputValidator
     from ..interpreter_client import InterpreterClient
 except ImportError:
     from schemas import CompetitionCreateDTO, CompetitionReadDTO
     from logger import get_logger
     from rate_limiter import rate_limit_middleware
     from exceptions import ValidationException, ExternalServiceException
-    from security import SecurityUtils
+    from security.validation import InputValidator
     from interpreter_client import InterpreterClient
 
 logger = get_logger(__name__)
@@ -26,9 +26,9 @@ router = APIRouter(prefix="/competitions", tags=["competitions"])
 async def create_competition_endpoint(competition_data: CompetitionCreateDTO, request: Request):
     logger.info(f"Creating competition: {competition_data.name}")
     
-    competition_data.name = SecurityUtils.sanitize_input(competition_data.name)
-    competition_data.organizer = SecurityUtils.sanitize_input(competition_data.organizer)
-    competition_data.invite_code = SecurityUtils.sanitize_input(competition_data.invite_code)
+    competition_data.name = InputValidator.sanitize_input(competition_data.name)
+    competition_data.organizer = InputValidator.sanitize_input(competition_data.organizer)
+    competition_data.invite_code = InputValidator.sanitize_input(competition_data.invite_code)
     
     async with InterpreterClient() as client:
         try:
@@ -69,9 +69,9 @@ def update_competition_endpoint(competition_id: str, competition_data: Competiti
     if not competition_id or len(competition_id) < 1:
         raise ValidationException("Invalid competition ID")
     
-    competition_data.name = SecurityUtils.sanitize_input(competition_data.name)
-    competition_data.organizer = SecurityUtils.sanitize_input(competition_data.organizer)
-    competition_data.invite_code = SecurityUtils.sanitize_input(competition_data.invite_code)
+    competition_data.name = InputValidator.sanitize_input(competition_data.name)
+    competition_data.organizer = InputValidator.sanitize_input(competition_data.organizer)
+    competition_data.invite_code = InputValidator.sanitize_input(competition_data.invite_code)
     
     logger.info(f"Competition updated successfully: {competition_id}")
     
@@ -103,7 +103,7 @@ def get_competition_by_invite_endpoint(invite_code: str, request: Request):
     if not invite_code or len(invite_code) < 1:
         raise ValidationException("Invalid invite code")
     
-    invite_code = SecurityUtils.sanitize_input(invite_code)
+    invite_code = InputValidator.sanitize_input(invite_code)
     
     logger.info(f"Competition retrieved by invite code: {invite_code}")
     

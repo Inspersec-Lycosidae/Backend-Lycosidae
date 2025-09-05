@@ -2,7 +2,7 @@
 Configurações da aplicação usando Pydantic Settings
 """
 from pydantic_settings import BaseSettings
-from pydantic import Field, validator
+from pydantic import Field, field_validator
 from typing import List, Optional
 import os
 from pathlib import Path
@@ -17,15 +17,15 @@ class Settings(BaseSettings):
     host: str = "0.0.0.0"
     port: int = 8000
     
-    interpreter_url: str = Field("http://localhost:8001", env="INTERPRETER_URL")
+    interpreter_url: str = Field("http://localhost:8080", env="INTERPRETER_URL")
     
     jwt_secret: str = Field(..., env="JWT_SECRET")
     jwt_algorithm: str = Field("HS256", env="JWT_ALGORITHM")
     jwt_expiration: int = Field(3600, env="JWT_EXPIRATION")  # 1 hora
     
     secret_key: str = Field(..., env="SECRET_KEY")
-    allowed_hosts: List[str] = Field(["localhost", "127.0.0.1"], env="ALLOWED_HOSTS")
-    cors_origins: List[str] = Field(["http://localhost:3000"], env="CORS_ORIGINS")
+    allowed_hosts: str = Field("localhost,127.0.0.1", env="ALLOWED_HOSTS")
+    cors_origins: str = Field("http://localhost:3000", env="CORS_ORIGINS")
     
     rate_limit_requests: int = Field(100, env="RATE_LIMIT_REQUESTS")
     rate_limit_window: int = Field(60, env="RATE_LIMIT_WINDOW")  # segundos
@@ -39,8 +39,8 @@ class Settings(BaseSettings):
     smtp_tls: bool = Field(True, env="SMTP_TLS")
     
     max_file_size: int = Field(10485760, env="MAX_FILE_SIZE")  # 10MB
-    allowed_file_types: List[str] = Field(
-        ["image/jpeg", "image/png", "image/gif", "application/pdf"], 
+    allowed_file_types: str = Field(
+        "image/jpeg,image/png,image/gif,application/pdf", 
         env="ALLOWED_FILE_TYPES"
     )
     
@@ -53,25 +53,23 @@ class Settings(BaseSettings):
     password_require_numbers: bool = True
     password_require_special_chars: bool = True
     
-    @validator("allowed_hosts", pre=True)
-    def parse_allowed_hosts(cls, v):
-        if isinstance(v, str):
-            return [host.strip() for host in v.split(",")]
-        return v
+    @property
+    def allowed_hosts_list(self) -> List[str]:
+        """Retorna allowed_hosts como lista"""
+        return [host.strip() for host in self.allowed_hosts.split(",")]
     
-    @validator("cors_origins", pre=True)
-    def parse_cors_origins(cls, v):
-        if isinstance(v, str):
-            return [origin.strip() for origin in v.split(",")]
-        return v
+    @property
+    def cors_origins_list(self) -> List[str]:
+        """Retorna cors_origins como lista"""
+        return [origin.strip() for origin in self.cors_origins.split(",")]
     
-    @validator("allowed_file_types", pre=True)
-    def parse_allowed_file_types(cls, v):
-        if isinstance(v, str):
-            return [file_type.strip() for file_type in v.split(",")]
-        return v
+    @property
+    def allowed_file_types_list(self) -> List[str]:
+        """Retorna allowed_file_types como lista"""
+        return [file_type.strip() for file_type in self.allowed_file_types.split(",")]
     
-    @validator("jwt_expiration")
+    @field_validator("jwt_expiration")
+    @classmethod
     def validate_jwt_expiration(cls, v):
         if v < 60:
             raise ValueError("JWT expiration must be at least 60 seconds")
@@ -79,13 +77,15 @@ class Settings(BaseSettings):
             raise ValueError("JWT expiration must not exceed 86400 seconds (24 hours)")
         return v
     
-    @validator("rate_limit_requests")
+    @field_validator("rate_limit_requests")
+    @classmethod
     def validate_rate_limit_requests(cls, v):
         if v < 1:
             raise ValueError("Rate limit requests must be at least 1")
         return v
     
-    @validator("rate_limit_window")
+    @field_validator("rate_limit_window")
+    @classmethod
     def validate_rate_limit_window(cls, v):
         if v < 1:
             raise ValueError("Rate limit window must be at least 1 second")

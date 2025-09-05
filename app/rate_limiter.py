@@ -92,13 +92,24 @@ def rate_limit_middleware(endpoint: str, requests_per_minute: int = 60):
         return wrapper
     return decorator
 
-def get_rate_limit_info(request: Request) -> Dict:
+def get_rate_limit_info(request: Request, endpoint: str = "default") -> Dict:
     """Retorna informações sobre rate limiting"""
     client_ip = request.client.host if request.client else "unknown"
+    identifier = f"{client_ip}:{endpoint}"
+    
+    # Verifica se há entrada para este identificador
+    if identifier in limiter.requests:
+        entry = limiter.requests[identifier]
+        remaining = max(0, settings.rate_limit_requests - entry['count'])
+        reset_time = int(entry['reset_time'])
+    else:
+        remaining = settings.rate_limit_requests
+        reset_time = int(time.time() + settings.rate_limit_window)
     
     return {
         "limit": settings.rate_limit_requests,
-        "window": settings.rate_limit_window,
+        "remaining": remaining,
+        "reset_time": reset_time,
         "client_ip": client_ip,
         "message": "Rate limiting is active"
     }
