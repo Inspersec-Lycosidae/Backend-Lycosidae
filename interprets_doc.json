@@ -1,0 +1,2096 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "FastAPI",
+        "version": "0.1.0"
+    },
+    "paths": {
+        "/route": {
+            "get": {
+                "tags": [
+                    "route"
+                ],
+                "summary": "Root Func",
+                "description": "Função padrão, altere conforme necessário",
+                "operationId": "root_func_route_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/route/register": {
+            "post": {
+                "tags": [
+                    "route"
+                ],
+                "summary": "User Register",
+                "description": "Função para criação genérica de usuário baseada em um DTO JSON\nInput: UserCreateDTO\nOutput: UserReadDTO",
+                "operationId": "user_register_route_register_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserCreateDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserReadDTO"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/route/competitions": {
+            "post": {
+                "tags": [
+                    "route"
+                ],
+                "summary": "Create Competition Endpoint",
+                "description": "Cria uma nova competição",
+                "operationId": "create_competition_endpoint_route_competitions_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CompetitionCreateDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CompetitionReadDTO"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/route/competitions/{competition_id}": {
+            "get": {
+                "tags": [
+                    "route"
+                ],
+                "summary": "Get Competition Endpoint",
+                "description": "Busca uma competição pelo ID",
+                "operationId": "get_competition_endpoint_route_competitions__competition_id__get",
+                "parameters": [
+                    {
+                        "name": "competition_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Competition Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CompetitionReadDTO"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "route"
+                ],
+                "summary": "Update Competition Endpoint",
+                "description": "Atualiza uma competição existente",
+                "operationId": "update_competition_endpoint_route_competitions__competition_id__put",
+                "parameters": [
+                    {
+                        "name": "competition_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Competition Id"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CompetitionCreateDTO"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "route"
+                ],
+                "summary": "Delete Competition Endpoint",
+                "description": "Deleta uma competição",
+                "operationId": "delete_competition_endpoint_route_competitions__competition_id__delete",
+                "parameters": [
+                    {
+                        "name": "competition_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Competition Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/route/competitions/invite/{invite_code}": {
+            "get": {
+                "tags": [
+                    "route"
+                ],
+                "summary": "Get Competition By Invite Endpoint",
+                "description": "Busca uma competição pelo código de convite",
+                "operationId": "get_competition_by_invite_endpoint_route_competitions_invite__invite_code__get",
+                "parameters": [
+                    {
+                        "name": "invite_code",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Invite Code"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CompetitionReadDTO"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/route/exercises": {
+            "post": {
+                "tags": [
+                    "route"
+                ],
+                "summary": "Create Exercise Endpoint",
+                "description": "Cria um novo exercício",
+                "operationId": "create_exercise_endpoint_route_exercises_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ExerciseCreateDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ExerciseReadDTO"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/route/exercises/{exercise_id}": {
+            "get": {
+                "tags": [
+                    "route"
+                ],
+                "summary": "Get Exercise Endpoint",
+                "description": "Busca um exercício pelo ID",
+                "operationId": "get_exercise_endpoint_route_exercises__exercise_id__get",
+                "parameters": [
+                    {
+                        "name": "exercise_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Exercise Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ExerciseReadDTO"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "route"
+                ],
+                "summary": "Update Exercise Endpoint",
+                "description": "Atualiza um exercício existente",
+                "operationId": "update_exercise_endpoint_route_exercises__exercise_id__put",
+                "parameters": [
+                    {
+                        "name": "exercise_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Exercise Id"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ExerciseCreateDTO"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ExerciseReadDTO"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "route"
+                ],
+                "summary": "Delete Exercise Endpoint",
+                "description": "Deleta um exercício",
+                "operationId": "delete_exercise_endpoint_route_exercises__exercise_id__delete",
+                "parameters": [
+                    {
+                        "name": "exercise_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Exercise Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/route/tags": {
+            "post": {
+                "tags": [
+                    "route"
+                ],
+                "summary": "Create Tag Endpoint",
+                "description": "Cria uma nova tag",
+                "operationId": "create_tag_endpoint_route_tags_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TagCreateDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TagReadDTO"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/route/tags/{tag_id}": {
+            "get": {
+                "tags": [
+                    "route"
+                ],
+                "summary": "Get Tag Endpoint",
+                "description": "Busca uma tag pelo ID",
+                "operationId": "get_tag_endpoint_route_tags__tag_id__get",
+                "parameters": [
+                    {
+                        "name": "tag_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Tag Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TagReadDTO"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "route"
+                ],
+                "summary": "Update Tag Endpoint",
+                "description": "Atualiza uma tag existente",
+                "operationId": "update_tag_endpoint_route_tags__tag_id__put",
+                "parameters": [
+                    {
+                        "name": "tag_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Tag Id"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TagCreateDTO"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TagReadDTO"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "route"
+                ],
+                "summary": "Delete Tag Endpoint",
+                "description": "Deleta uma tag",
+                "operationId": "delete_tag_endpoint_route_tags__tag_id__delete",
+                "parameters": [
+                    {
+                        "name": "tag_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Tag Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/route/tags/type/{tag_type}": {
+            "get": {
+                "tags": [
+                    "route"
+                ],
+                "summary": "Get Tag By Type Endpoint",
+                "description": "Busca uma tag pelo tipo",
+                "operationId": "get_tag_by_type_endpoint_route_tags_type__tag_type__get",
+                "parameters": [
+                    {
+                        "name": "tag_type",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Tag Type"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TagReadDTO"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/route/teams": {
+            "post": {
+                "tags": [
+                    "route"
+                ],
+                "summary": "Create Team Endpoint",
+                "description": "Cria um novo time",
+                "operationId": "create_team_endpoint_route_teams_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TeamCreateDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TeamReadDTO"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/route/teams/{team_id}": {
+            "get": {
+                "tags": [
+                    "route"
+                ],
+                "summary": "Get Team Endpoint",
+                "description": "Busca um time pelo ID",
+                "operationId": "get_team_endpoint_route_teams__team_id__get",
+                "parameters": [
+                    {
+                        "name": "team_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Team Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TeamReadDTO"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "route"
+                ],
+                "summary": "Update Team Endpoint",
+                "description": "Atualiza um time existente",
+                "operationId": "update_team_endpoint_route_teams__team_id__put",
+                "parameters": [
+                    {
+                        "name": "team_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Team Id"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TeamCreateDTO"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TeamReadDTO"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "route"
+                ],
+                "summary": "Delete Team Endpoint",
+                "description": "Deleta um time",
+                "operationId": "delete_team_endpoint_route_teams__team_id__delete",
+                "parameters": [
+                    {
+                        "name": "team_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Team Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/route/containers": {
+            "post": {
+                "tags": [
+                    "route"
+                ],
+                "summary": "Create Container Endpoint",
+                "description": "Cria um novo container",
+                "operationId": "create_container_endpoint_route_containers_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ContainerCreateDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/route/containers/{container_id}": {
+            "get": {
+                "tags": [
+                    "route"
+                ],
+                "summary": "Get Container Endpoint",
+                "description": "Busca um container pelo ID",
+                "operationId": "get_container_endpoint_route_containers__container_id__get",
+                "parameters": [
+                    {
+                        "name": "container_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Container Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ContainerReadDTO"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "route"
+                ],
+                "summary": "Update Container Endpoint",
+                "description": "Atualiza um container existente",
+                "operationId": "update_container_endpoint_route_containers__container_id__put",
+                "parameters": [
+                    {
+                        "name": "container_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Container Id"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ContainerCreateDTO"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ContainerReadDTO"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "route"
+                ],
+                "summary": "Delete Container Endpoint",
+                "description": "Deleta um container",
+                "operationId": "delete_container_endpoint_route_containers__container_id__delete",
+                "parameters": [
+                    {
+                        "name": "container_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Container Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/route/user-competitions": {
+            "post": {
+                "tags": [
+                    "route"
+                ],
+                "summary": "Create User Competition Endpoint",
+                "description": "Cria um relacionamento usuário-competição",
+                "operationId": "create_user_competition_endpoint_route_user_competitions_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserCompetitionCreateDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserCompetitionCreateDTO"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/route/user-competitions/{user_id}/{competition_id}": {
+            "delete": {
+                "tags": [
+                    "route"
+                ],
+                "summary": "Delete User Competition Endpoint",
+                "description": "Deleta um relacionamento usuário-competição",
+                "operationId": "delete_user_competition_endpoint_route_user_competitions__user_id___competition_id__delete",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "User Id"
+                        }
+                    },
+                    {
+                        "name": "competition_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Competition Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/route/user-teams": {
+            "post": {
+                "tags": [
+                    "route"
+                ],
+                "summary": "Create User Team Endpoint",
+                "description": "Cria um relacionamento usuário-time",
+                "operationId": "create_user_team_endpoint_route_user_teams_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserTeamCreateDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserTeamCreateDTO"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/route/user-teams/{user_id}/{team_id}": {
+            "delete": {
+                "tags": [
+                    "route"
+                ],
+                "summary": "Delete User Team Endpoint",
+                "description": "Deleta um relacionamento usuário-time",
+                "operationId": "delete_user_team_endpoint_route_user_teams__user_id___team_id__delete",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "User Id"
+                        }
+                    },
+                    {
+                        "name": "team_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Team Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/route/team-competitions": {
+            "post": {
+                "tags": [
+                    "route"
+                ],
+                "summary": "Create Team Competition Endpoint",
+                "description": "Cria um relacionamento time-competição",
+                "operationId": "create_team_competition_endpoint_route_team_competitions_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TeamCompetitionCreateDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TeamCompetitionCreateDTO"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/route/team-competitions/{team_id}/{competition_id}": {
+            "delete": {
+                "tags": [
+                    "route"
+                ],
+                "summary": "Delete Team Competition Endpoint",
+                "description": "Deleta um relacionamento time-competição",
+                "operationId": "delete_team_competition_endpoint_route_team_competitions__team_id___competition_id__delete",
+                "parameters": [
+                    {
+                        "name": "team_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Team Id"
+                        }
+                    },
+                    {
+                        "name": "competition_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Competition Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/route/exercise-tags": {
+            "post": {
+                "tags": [
+                    "route"
+                ],
+                "summary": "Create Exercise Tag Endpoint",
+                "description": "Cria um relacionamento exercício-tag",
+                "operationId": "create_exercise_tag_endpoint_route_exercise_tags_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ExerciseTagCreateDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ExerciseTagCreateDTO"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/route/exercise-tags/{exercise_id}/{tag_id}": {
+            "delete": {
+                "tags": [
+                    "route"
+                ],
+                "summary": "Delete Exercise Tag Endpoint",
+                "description": "Deleta um relacionamento exercício-tag",
+                "operationId": "delete_exercise_tag_endpoint_route_exercise_tags__exercise_id___tag_id__delete",
+                "parameters": [
+                    {
+                        "name": "exercise_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Exercise Id"
+                        }
+                    },
+                    {
+                        "name": "tag_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Tag Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/route/exercise-competitions": {
+            "post": {
+                "tags": [
+                    "route"
+                ],
+                "summary": "Create Exercise Competition Endpoint",
+                "description": "Cria um relacionamento exercício-competição",
+                "operationId": "create_exercise_competition_endpoint_route_exercise_competitions_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ExerciseCompetitionCreateDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ExerciseCompetitionCreateDTO"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/route/exercise-competitions/{exercise_id}/{competition_id}": {
+            "delete": {
+                "tags": [
+                    "route"
+                ],
+                "summary": "Delete Exercise Competition Endpoint",
+                "description": "Deleta um relacionamento exercício-competição",
+                "operationId": "delete_exercise_competition_endpoint_route_exercise_competitions__exercise_id___competition_id__delete",
+                "parameters": [
+                    {
+                        "name": "exercise_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Exercise Id"
+                        }
+                    },
+                    {
+                        "name": "competition_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Competition Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/route/container-competitions": {
+            "post": {
+                "tags": [
+                    "route"
+                ],
+                "summary": "Create Container Competition Endpoint",
+                "description": "Cria um relacionamento container-competição",
+                "operationId": "create_container_competition_endpoint_route_container_competitions_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ContainerCompetitionCreateDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ContainerCompetitionCreateDTO"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/route/container-competitions/{container_id}/{competition_id}": {
+            "delete": {
+                "tags": [
+                    "route"
+                ],
+                "summary": "Delete Container Competition Endpoint",
+                "description": "Deleta um relacionamento container-competição",
+                "operationId": "delete_container_competition_endpoint_route_container_competitions__container_id___competition_id__delete",
+                "parameters": [
+                    {
+                        "name": "container_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Container Id"
+                        }
+                    },
+                    {
+                        "name": "competition_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Competition Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/": {
+            "get": {
+                "summary": "Read Root",
+                "operationId": "read_root__get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "CompetitionCreateDTO": {
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    },
+                    "organizer": {
+                        "type": "string",
+                        "title": "Organizer"
+                    },
+                    "invite_code": {
+                        "type": "string",
+                        "title": "Invite Code"
+                    },
+                    "start_date": {
+                        "type": "string",
+                        "title": "Start Date"
+                    },
+                    "end_date": {
+                        "type": "string",
+                        "title": "End Date"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "name",
+                    "organizer",
+                    "invite_code",
+                    "start_date",
+                    "end_date"
+                ],
+                "title": "CompetitionCreateDTO"
+            },
+            "CompetitionReadDTO": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "title": "Id"
+                    },
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    },
+                    "organizer": {
+                        "type": "string",
+                        "title": "Organizer"
+                    },
+                    "invite_code": {
+                        "type": "string",
+                        "title": "Invite Code"
+                    },
+                    "start_date": {
+                        "type": "string",
+                        "title": "Start Date"
+                    },
+                    "end_date": {
+                        "type": "string",
+                        "title": "End Date"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id",
+                    "name",
+                    "organizer",
+                    "invite_code",
+                    "start_date",
+                    "end_date"
+                ],
+                "title": "CompetitionReadDTO"
+            },
+            "ContainerCompetitionCreateDTO": {
+                "properties": {
+                    "container_id": {
+                        "type": "string",
+                        "title": "Container Id"
+                    },
+                    "competition_id": {
+                        "type": "string",
+                        "title": "Competition Id"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "container_id",
+                    "competition_id"
+                ],
+                "title": "ContainerCompetitionCreateDTO"
+            },
+            "ContainerCreateDTO": {
+                "properties": {
+                    "deadline": {
+                        "type": "string",
+                        "title": "Deadline"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "deadline"
+                ],
+                "title": "ContainerCreateDTO"
+            },
+            "ContainerReadDTO": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "title": "Id"
+                    },
+                    "deadline": {
+                        "type": "string",
+                        "title": "Deadline"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id",
+                    "deadline"
+                ],
+                "title": "ContainerReadDTO"
+            },
+            "ExerciseCompetitionCreateDTO": {
+                "properties": {
+                    "exercise_id": {
+                        "type": "string",
+                        "title": "Exercise Id"
+                    },
+                    "competition_id": {
+                        "type": "string",
+                        "title": "Competition Id"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "exercise_id",
+                    "competition_id"
+                ],
+                "title": "ExerciseCompetitionCreateDTO"
+            },
+            "ExerciseCreateDTO": {
+                "properties": {
+                    "link": {
+                        "type": "string",
+                        "title": "Link"
+                    },
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    },
+                    "score": {
+                        "type": "integer",
+                        "title": "Score"
+                    },
+                    "difficulty": {
+                        "type": "string",
+                        "title": "Difficulty"
+                    },
+                    "port": {
+                        "type": "integer",
+                        "title": "Port"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "link",
+                    "name",
+                    "score",
+                    "difficulty",
+                    "port"
+                ],
+                "title": "ExerciseCreateDTO"
+            },
+            "ExerciseReadDTO": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "title": "Id"
+                    },
+                    "link": {
+                        "type": "string",
+                        "title": "Link"
+                    },
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    },
+                    "score": {
+                        "type": "integer",
+                        "title": "Score"
+                    },
+                    "difficulty": {
+                        "type": "string",
+                        "title": "Difficulty"
+                    },
+                    "port": {
+                        "type": "integer",
+                        "title": "Port"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id",
+                    "link",
+                    "name",
+                    "score",
+                    "difficulty",
+                    "port"
+                ],
+                "title": "ExerciseReadDTO"
+            },
+            "ExerciseTagCreateDTO": {
+                "properties": {
+                    "exercise_id": {
+                        "type": "string",
+                        "title": "Exercise Id"
+                    },
+                    "tag_id": {
+                        "type": "string",
+                        "title": "Tag Id"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "exercise_id",
+                    "tag_id"
+                ],
+                "title": "ExerciseTagCreateDTO"
+            },
+            "HTTPValidationError": {
+                "properties": {
+                    "detail": {
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationError"
+                        },
+                        "type": "array",
+                        "title": "Detail"
+                    }
+                },
+                "type": "object",
+                "title": "HTTPValidationError"
+            },
+            "TagCreateDTO": {
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "title": "Type"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "type"
+                ],
+                "title": "TagCreateDTO"
+            },
+            "TagReadDTO": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "title": "Id"
+                    },
+                    "type": {
+                        "type": "string",
+                        "title": "Type"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id",
+                    "type"
+                ],
+                "title": "TagReadDTO"
+            },
+            "TeamCompetitionCreateDTO": {
+                "properties": {
+                    "team_id": {
+                        "type": "string",
+                        "title": "Team Id"
+                    },
+                    "competition_id": {
+                        "type": "string",
+                        "title": "Competition Id"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "team_id",
+                    "competition_id"
+                ],
+                "title": "TeamCompetitionCreateDTO"
+            },
+            "TeamCreateDTO": {
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    },
+                    "competition": {
+                        "type": "string",
+                        "title": "Competition"
+                    },
+                    "creator": {
+                        "type": "string",
+                        "title": "Creator"
+                    },
+                    "score": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Score",
+                        "default": 0
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "name",
+                    "competition",
+                    "creator"
+                ],
+                "title": "TeamCreateDTO"
+            },
+            "TeamReadDTO": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "title": "Id"
+                    },
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    },
+                    "competition": {
+                        "type": "string",
+                        "title": "Competition"
+                    },
+                    "creator": {
+                        "type": "string",
+                        "title": "Creator"
+                    },
+                    "score": {
+                        "type": "integer",
+                        "title": "Score"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id",
+                    "name",
+                    "competition",
+                    "creator",
+                    "score"
+                ],
+                "title": "TeamReadDTO"
+            },
+            "UserCompetitionCreateDTO": {
+                "properties": {
+                    "user_id": {
+                        "type": "string",
+                        "title": "User Id"
+                    },
+                    "competition_id": {
+                        "type": "string",
+                        "title": "Competition Id"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "user_id",
+                    "competition_id"
+                ],
+                "title": "UserCompetitionCreateDTO"
+            },
+            "UserCreateDTO": {
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "title": "Username"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "title": "Email"
+                    },
+                    "password": {
+                        "type": "string",
+                        "title": "Password"
+                    },
+                    "phone_number": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Phone Number"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "username",
+                    "email",
+                    "password"
+                ],
+                "title": "UserCreateDTO"
+            },
+            "UserReadDTO": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "title": "Id"
+                    },
+                    "username": {
+                        "type": "string",
+                        "title": "Username"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "title": "Email"
+                    },
+                    "phone_number": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Phone Number"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id",
+                    "username",
+                    "email"
+                ],
+                "title": "UserReadDTO"
+            },
+            "UserTeamCreateDTO": {
+                "properties": {
+                    "user_id": {
+                        "type": "string",
+                        "title": "User Id"
+                    },
+                    "team_id": {
+                        "type": "string",
+                        "title": "Team Id"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "user_id",
+                    "team_id"
+                ],
+                "title": "UserTeamCreateDTO"
+            },
+            "ValidationError": {
+                "properties": {
+                    "loc": {
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "integer"
+                                }
+                            ]
+                        },
+                        "type": "array",
+                        "title": "Location"
+                    },
+                    "msg": {
+                        "type": "string",
+                        "title": "Message"
+                    },
+                    "type": {
+                        "type": "string",
+                        "title": "Error Type"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "loc",
+                    "msg",
+                    "type"
+                ],
+                "title": "ValidationError"
+            }
+        }
+    }
+}
