@@ -20,7 +20,6 @@ class BracketLevelFormatter(logging.Formatter):
         logging.CRITICAL: "\033[1;31m"  # Vermelho brilhante
     }
     
-    # Cor para links (verde)
     LINK_COLOR = "\033[32m"
 
     def __init__(self, fmt=None, datefmt=None, use_color=True):

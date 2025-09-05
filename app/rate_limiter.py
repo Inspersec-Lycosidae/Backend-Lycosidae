@@ -26,21 +26,17 @@ class SimpleRateLimiter:
         """Verifica se a requisição é permitida"""
         current_time = time.time()
         
-        # Limpa entradas antigas
         self._cleanup_old_entries(current_time, window)
         
-        # Verifica limite para este identificador
         if identifier not in self.requests:
             self.requests[identifier] = {'count': 0, 'reset_time': current_time + window}
         
         entry = self.requests[identifier]
         
-        # Reset se a janela expirou
         if current_time > entry['reset_time']:
             entry['count'] = 0
             entry['reset_time'] = current_time + window
         
-        # Verifica se excedeu o limite
         if entry['count'] >= limit:
             return False
         
@@ -79,7 +75,6 @@ def rate_limit_middleware(endpoint: str, requests_per_minute: int = 60):
             client_ip = request.client.host if request.client else "unknown"
             identifier = f"{client_ip}:{endpoint}"
             
-            # Verifica rate limit
             if not limiter.is_allowed(identifier, requests_per_minute, 60):
                 logger.warning(f"Rate limit exceeded for {identifier}")
                 raise HTTPException(

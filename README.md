@@ -91,8 +91,16 @@ docker build -t backend-lycosidae .
 docker run -p 8000:8000 --env-file .env backend-lycosidae
 ```
 
-## 📚 Documentação da API
+## 📚 Documentação
 
+### 📖 **Documentação Completa**
+Toda a documentação está organizada na pasta [`docs/`](./docs/):
+
+- **[📋 Índice Geral](./docs/README.md)** - Visão geral de toda documentação
+- **[🔗 API Documentation](./docs/API_DOCUMENTATION.md)** - Guia completo da API para frontend
+- **[🏗️ Arquitetura de Routers](./docs/routers-architecture.md)** - Estrutura modular do backend
+
+### 🌐 **Documentação Interativa**
 Após iniciar o servidor, acesse:
 
 - **Swagger UI**: http://localhost:8000/docs
@@ -101,20 +109,28 @@ Após iniciar o servidor, acesse:
 
 ## 🔐 Endpoints Principais
 
-### Sistema
-- `GET /api/v1/system/health` - Health check
-- `GET /api/v1/system/health/interpreter` - Status do interpretador
-- `GET /api/v1/system/rate-limit/info` - Informações de rate limiting
+### 🏠 Sistema
+- `GET /` - Root endpoint
+- `GET /system/health` - Health check
+- `GET /system/rate-limit/info` - Informações de rate limiting
 
-### Autenticação
-- `POST /api/v1/auth/register` - Registro de usuário
-- `POST /api/v1/auth/login` - Login
-- `POST /api/v1/auth/refresh` - Refresh token
-- `POST /api/v1/auth/logout` - Logout
+### 👤 Usuários
+- `POST /route/register` - Registro de usuário
 
-### Usuários
-- `GET /api/v1/users/me` - Perfil do usuário atual
-- `PUT /api/v1/users/me` - Atualizar perfil
+### 🏆 Competições
+- `POST /route/competitions` - Criar competição
+- `GET /route/competitions/{id}` - Buscar competição
+- `GET /route/competitions/invite/{code}` - Buscar por convite
+
+### 💪 Exercícios
+- `POST /route/exercises` - Criar exercício
+- `GET /route/exercises/{id}` - Buscar exercício
+
+### 🏷️ Tags & 👥 Times & 🐳 Containers
+- Endpoints CRUD completos para cada entidade
+- Relacionamentos entre entidades
+
+> **📖 Para documentação completa de todos os 38 endpoints, consulte [`docs/API_DOCUMENTATION.md`](./docs/API_DOCUMENTATION.md)**
 
 ## 🔒 Segurança
 
@@ -177,18 +193,4 @@ Rate limit exceeded
 ```
 **Solução**: Aguarde o tempo de reset ou ajuste os limites no `.env`
 
-## 🤝 Contribuição
-
-1. Fork o projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request
-
-## 📝 Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para detalhes.
-
-## 🆘 Suporte
-
-Para suporte, abra uma issue no repositório ou entre em contato com a equipe de desenvolvimento.
+ uma issue no repositório ou entre em contato com a equipe de desenvolvimento.

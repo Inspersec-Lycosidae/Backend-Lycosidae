@@ -14,14 +14,11 @@ except ImportError:
     from security import SecurityUtils
     from exceptions import ValidationException
 
-# Configuração do logger para este módulo
 logger = get_logger(__name__)
 
 def validate_request_headers(request: Request) -> bool:
-    """Valida headers básicos da requisição"""
     user_agent = request.headers.get("User-Agent", "")
     
-    # Lista de bots conhecidos para bloquear
     blocked_bots = [
         "bot", "crawler", "spider", "scraper",
         "scanner", "probe", "test"
@@ -36,7 +33,6 @@ def validate_request_headers(request: Request) -> bool:
     return True
 
 def sanitize_request_data(data: Any) -> Any:
-    """Sanitiza dados de entrada recursivamente"""
     if isinstance(data, dict):
         return {key: sanitize_request_data(value) for key, value in data.items()}
     elif isinstance(data, list):

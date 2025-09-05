@@ -10,54 +10,43 @@ from pathlib import Path
 class Settings(BaseSettings):
     """Configurações da aplicação"""
     
-    # Configurações da aplicação
     app_name: str = "Backend-Lycosidae"
     app_version: str = "1.0.0"
     debug: bool = False
     
-    # Configurações do servidor
     host: str = "0.0.0.0"
     port: int = 8000
     
-    # Configurações do interpretador
     interpreter_url: str = Field("http://localhost:8001", env="INTERPRETER_URL")
     
-    # Configurações JWT
     jwt_secret: str = Field(..., env="JWT_SECRET")
     jwt_algorithm: str = Field("HS256", env="JWT_ALGORITHM")
     jwt_expiration: int = Field(3600, env="JWT_EXPIRATION")  # 1 hora
     
-    # Configurações de segurança
     secret_key: str = Field(..., env="SECRET_KEY")
     allowed_hosts: List[str] = Field(["localhost", "127.0.0.1"], env="ALLOWED_HOSTS")
     cors_origins: List[str] = Field(["http://localhost:3000"], env="CORS_ORIGINS")
     
-    # Configurações de rate limiting
     rate_limit_requests: int = Field(100, env="RATE_LIMIT_REQUESTS")
     rate_limit_window: int = Field(60, env="RATE_LIMIT_WINDOW")  # segundos
     
-    # Configurações de log
     log_level: str = Field("INFO", env="LOG_LEVEL")
     
-    # Configurações de email (opcional)
     smtp_host: Optional[str] = Field(None, env="SMTP_HOST")
     smtp_port: int = Field(587, env="SMTP_PORT")
     smtp_username: Optional[str] = Field(None, env="SMTP_USERNAME")
     smtp_password: Optional[str] = Field(None, env="SMTP_PASSWORD")
     smtp_tls: bool = Field(True, env="SMTP_TLS")
     
-    # Configurações de upload
     max_file_size: int = Field(10485760, env="MAX_FILE_SIZE")  # 10MB
     allowed_file_types: List[str] = Field(
         ["image/jpeg", "image/png", "image/gif", "application/pdf"], 
         env="ALLOWED_FILE_TYPES"
     )
     
-    # Configurações de cache
     redis_url: Optional[str] = Field(None, env="REDIS_URL")
     cache_ttl: int = Field(300, env="CACHE_TTL")  # 5 minutos
     
-    # Configurações de senha
     password_min_length: int = 8
     password_require_uppercase: bool = True
     password_require_lowercase: bool = True
@@ -84,9 +73,9 @@ class Settings(BaseSettings):
     
     @validator("jwt_expiration")
     def validate_jwt_expiration(cls, v):
-        if v < 60:  # Mínimo 1 minuto
+        if v < 60:
             raise ValueError("JWT expiration must be at least 60 seconds")
-        if v > 86400:  # Máximo 24 horas
+        if v > 86400:
             raise ValueError("JWT expiration must not exceed 86400 seconds (24 hours)")
         return v
     
@@ -107,10 +96,8 @@ class Settings(BaseSettings):
         env_file_encoding = "utf-8"
         case_sensitive = False
 
-# Instância global das configurações
 settings = Settings()
 
-# Função para validar se as configurações críticas estão definidas
 def validate_settings():
     """Valida se as configurações críticas estão definidas"""
     critical_settings = [
