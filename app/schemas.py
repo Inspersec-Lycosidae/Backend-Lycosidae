@@ -18,13 +18,5 @@ class AuthToken(BaseModel):
     class Config:
         extra = "allow"
 
-class UserCreateDTO(BaseModel):
-    username: str
-    email: EmailStr
-    password: str
 
-class UserReadDTO(BaseModel):
-    id: int
-    username: str
-    email: EmailStr
     

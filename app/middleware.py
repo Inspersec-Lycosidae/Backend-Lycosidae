@@ -3,14 +3,8 @@
 #session token and extracting its info for use in the routes functions
 from fastapi import Request, HTTPException
 from datetime import datetime, timedelta
-try:
-    # Import relativo quando executado como módulo
-    from .schemas import AuthToken
-    from .logger import get_logger
-except ImportError:
-    # Import absoluto quando executado diretamente
-    from schemas import AuthToken
-    from logger import get_logger
+from schemas import AuthToken
+from logger import get_logger
 from typing import Dict
 import jwt
 import os
@@ -45,10 +39,12 @@ COOKIE_NAME = "session_token"
 ### Helper Function to extract token from a Bearer ###
 ######################################################
 
-#Extract JWT from cookie or Authorization header
-#Input: http/https request
-#Output: String of the token
 def extract_token(request: Request) -> str:
+    '''
+    Extract JWT from cookie or Authorization header
+    Input: http/https request
+    Output: String of the token
+    '''
     logger.debug("Attempting to extract token from request")
     # First try cookie
     token = request.cookies.get(COOKIE_NAME)
@@ -66,10 +62,12 @@ def extract_token(request: Request) -> str:
     logger.warning("No valid token found in request")
     raise HTTPException(status_code=401, detail="User not authenticated")
 
-#Description: Receives a http/https request and returns the session_token JWT as a Python Dictionary
-#Input: http/https request
-#Output: Python Dict object
 def get_cookie_as_dict(request: Request) -> Dict:
+    '''
+    #Description: Receives a http/https request and returns the session_token JWT as a Python Dictionary
+    #Input: http/https request
+    #Output: Python Dict object
+    '''
     token = extract_token(request)
 
     try:
@@ -84,10 +82,12 @@ def get_cookie_as_dict(request: Request) -> Dict:
         raise HTTPException(status_code=401, detail="Invalid token")
     
 
-#Description: Receives a http/https request and returns the session_token JWT as a AuthToken object
-#Input: http/https request
-#Output: AuthToken object
 def get_cookie_as_model(request: Request) -> AuthToken:
+    '''
+    Description: Receives a http/https request and returns the session_token JWT as a AuthToken object
+    Input: http/https request
+    Output: AuthToken object
+    '''
     payload = get_cookie_as_dict(request)
     try:
         auth_token = AuthToken(**payload)
@@ -98,10 +98,12 @@ def get_cookie_as_model(request: Request) -> AuthToken:
         raise HTTPException(status_code=400, detail=f"Token payload invalid: {e}")
     
 
-#Description: Receives a python dictionary and returns a valid JWT token string
-#Input: Python Dictionary
-#Output: JWT String
 def make_cookie_from_dict(payload: Dict) -> str:
+    '''
+    Description: Receives a python dictionary and returns a valid JWT token string
+    Input: Python Dictionary
+    Output: JWT String
+    '''
     payload = payload.copy()
     logger.debug(f"Creating JWT token for user: {payload.get('username', 'unknown')}")
 
@@ -117,10 +119,12 @@ def make_cookie_from_dict(payload: Dict) -> str:
         raise RuntimeError(f"Error generating token: {e}")
     
 
-#Description: Receives a AuthToken object and returns a valid JWT token string
-#Input: AuthToken Object
-#Output: JWT String
 def make_cookie_from_model(auth_token: AuthToken) -> str:
+    '''
+    Description: Receives a AuthToken object and returns a valid JWT token string
+    Input: AuthToken Object
+    Output: JWT String
+    '''
     logger.debug(f"Creating JWT token from AuthToken model for user: {auth_token.username}")
-    payload = auth_token.dict(exclude_none=True)
+    payload = auth_token.model_dump(exclude_none=True)
     return make_cookie_from_dict(payload)
