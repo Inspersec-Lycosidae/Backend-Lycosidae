@@ -11,7 +11,6 @@ from typing import Optional
 logger = get_logger(__name__)
 
 router = APIRouter(
-    prefix="/",
     tags=["backend"]
 )
 
