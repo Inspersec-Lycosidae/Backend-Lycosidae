@@ -1,26 +1,32 @@
-"""
-Sistema de logging personalizado para o Dashboard
-"""
+# logger.py
 import logging
 import re
 from datetime import datetime
 
+"""
+
+Sistema de logging personalizado para o Dashboard
+
+"""
+
 class BracketLevelFormatter(logging.Formatter):
     """
-    Formatter que exibe: "YYYY-MM-DD HH:MM:SS | [LEVEL] Mensagem"
-    com cores para INFO, WARNING, ERROR e CRITICAL.
+
+    Formatter that shows: "YYYY-MM-DD HH:MM:SS | [LEVEL] Message"
+    with colors for INFO, WARNING, ERROR and CRITICAL.
+
     """
 
     COLOR_RESET = "\033[0m"
     COLORS = {
-        logging.DEBUG: "\033[35m",     # Magenta
-        logging.INFO: "\033[36m",      # Ciano
-        logging.WARNING: "\033[33m",   # Amarelo
-        logging.ERROR: "\033[31m",     # Vermelho
-        logging.CRITICAL: "\033[1;31m"  # Vermelho brilhante
+        logging.DEBUG: "\033[35m",      # Magenta
+        logging.INFO: "\033[36m",       # Cyan
+        logging.WARNING: "\033[33m",    # Yellow
+        logging.ERROR: "\033[31m",      # Red
+        logging.CRITICAL: "\033[1;31m"  # Bright Red
     }
     
-    # Cor para links (verde)
+    # Link's color (green)
     LINK_COLOR = "\033[32m"
 
     def __init__(self, fmt=None, datefmt=None, use_color=True):
@@ -34,7 +40,7 @@ class BracketLevelFormatter(logging.Formatter):
             if color:
                 level_tag = f"{color}{level_tag}{self.COLOR_RESET}"
         
-        # Processar mensagem para colorir links
+        # Process message to color links
         if self.use_color:
             record.msg = self._colorize_links(str(record.msg))
         
@@ -43,8 +49,11 @@ class BracketLevelFormatter(logging.Formatter):
         return super().format(record)
     
     def _colorize_links(self, message: str) -> str:
-        """Coloriza links (http/https) na mensagem"""
-        # Regex para encontrar URLs
+        """
+        
+        Color links (http/https) on messages
+        
+        """
         url_pattern = r'https?://[^\s]+'
         
         def replace_url(match):
@@ -56,10 +65,14 @@ class BracketLevelFormatter(logging.Formatter):
         return colored_message
 
 def setup_logging(level: int = logging.INFO) -> logging.Logger:
-    """Configura logging global com formatter padronizado e cores."""
+    """
+    
+    Cofigure global logging with standardized formatter and colors
+    
+    """
     root = logging.getLogger()
 
-    # Evita handlers duplicados em hot-reload
+    # Avoid duped handlers on hot-reload
     if root.handlers:
         for h in list(root.handlers):
             root.removeHandler(h)
@@ -76,12 +89,16 @@ def setup_logging(level: int = logging.INFO) -> logging.Logger:
     root.setLevel(level)
     root.addHandler(handler)
 
-    # Reduz verbosidade de bibliotecas de terceiros
+    # Reduce verbose from external libraries
     logging.getLogger('apscheduler').setLevel(logging.WARNING)
     logging.getLogger('apscheduler.executors.default').setLevel(logging.WARNING)
 
     return root
 
 def get_logger(name: str) -> logging.Logger:
-    """Retorna um logger configurado para o módulo especificado."""
+    """
+    
+    Retorn a configured logger to the specified module
+    
+    """
     return logging.getLogger(name) 
