@@ -3,7 +3,7 @@
 # session token and extracting its info for use in the routes functions
 from fastapi import Request, HTTPException, Depends
 from datetime import datetime, timedelta, timezone
-from app.schemas import AuthToken
+from app.schemas.auth import AuthToken
 from app.logger import get_logger
 from typing import Dict
 import jwt
