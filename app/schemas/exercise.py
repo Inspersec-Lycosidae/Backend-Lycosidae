@@ -28,7 +28,6 @@ class ExerciseReadDTO(ExerciseBase):
 
     id: str
     is_active: bool
-    solved_by_me: bool = False
 
     class Config:
         from_attributes = True

@@ -25,11 +25,6 @@ async def get_connection_info(ex_id: str, comp_id: str, user: AuthToken = Depend
     """
     Retorna os dados de conexão de um container.
     """
-    # Validação rápida de time
-    teams = await interpreter.get_competition_teams(comp_id)
-    if not any(user.id in t.get("members_ids", []) for t in teams):
-        raise HTTPException(status_code=403, detail="Acesso negado: Você precisa de um time nesta competição")
-
     container = await interpreter.get_container_by_exercise(ex_id)
     if not container or not container.get("is_active"):
         raise HTTPException(status_code=404, detail="A infraestrutura deste desafio não está ativa")
@@ -83,24 +78,13 @@ async def submit_flag(payload: SolveSubmitDTO, user: AuthToken = Depends(get_cur
     if now > end_date:
         raise HTTPException(status_code=400, detail="A competição já terminou")
 
-    # 2. Validação de Equipe (Obrigatoriedade e Pertencimento)
-    teams = await interpreter.get_competition_teams(payload.competitions_id)
-    target_team = next((t for t in teams if t["id"] == payload.teams_id), None)
-    
-    if not target_team:
-        raise HTTPException(status_code=400, detail="Equipe inválida para esta competição")
-    
-    if user.id not in target_team.get("members_ids", []):
-        logger.warning(f"Utilizador {user.username} tentou submeter flag para a equipe {payload.teams_id} sem ser membro.")
-        raise HTTPException(status_code=403, detail="Você não pertence a esta equipe")
-
     # 3. Verificar se o exercício pertence à competição
     comp_exercises = await interpreter.get_competition_exercises(payload.competitions_id)
     if not any(ex["id"] == payload.exercises_id for ex in comp_exercises):
         raise HTTPException(status_code=400, detail="Este exercício não pertence a esta competição")
 
     # 4. Enviar para o Interpreter para validação final da flag e persistência
-    logger.info(f"Submissão validada pelo Backend. Enviando para o Interpreter: User {user.username}, Team {target_team['name']}")
+    logger.info(f"Submissão validada pelo Backend. Enviando para o Interpreter: User {user.username}")
     return await interpreter.submit_flag(payload, user.id)
 
 @router.post("/", response_model=ExerciseReadDTO, status_code=201)

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends
 from typing import List
 
-from app.schemas.team import ScoreboardEntryDTO
+from app.schemas.scoreboard import ScoreboardEntryDTO
 from app.schemas.auth import AuthToken
 from app.middleware import get_current_user
 from app.services.interpreter_client import interpreter

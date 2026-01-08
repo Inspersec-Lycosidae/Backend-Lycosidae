@@ -54,8 +54,8 @@ class InterpreterClient:
     async def get_competition(self, comp_id: str) -> Optional[Dict]:
         return await self._request("GET", f"/competitions/{comp_id}")
 
-    async def get_competition_teams(self, comp_id: str) -> List[Dict]:
-        return await self._request("GET", f"/competitions/{comp_id}/teams")
+    async def get_competition_participants(self, comp_id: str) -> List[Dict]:
+        return await self._request("GET", f"/competitions/{comp_id}/participants")
 
     async def get_competition_exercises(self, comp_id: str) -> List[Dict]:
         return await self._request("GET", f"/competitions/{comp_id}/exercises")
@@ -63,27 +63,14 @@ class InterpreterClient:
     async def create_competition(self, comp_data: Any) -> Dict:
         return await self._request("POST", "/competitions/", json=self._dump(comp_data))
 
+    async def join_competition(self, invite_code: Any, user_id: str) -> Dict:
+        return await self._request("DELETE", f"/competitions/join", json=self._dump(invite_code), params={"user_id": user_id})
+
     async def update_competition(self, comp_id: str, update_data: Any) -> Dict:
         return await self._request("PATCH", f"/competitions/{comp_id}", json=self._dump(update_data))
 
     async def delete_competition(self, comp_id: str) -> Dict:
         return await self._request("DELETE", f"/competitions/{comp_id}")
-
-    # --- 3. TEAMS ---
-    async def list_all_teams(self) -> Optional[Dict]:
-        return await self._request("GET", f"/teams/")
-
-    async def get_team(self, team_id: str) -> Optional[Dict]:
-        return await self._request("GET", f"/teams/{team_id}")
-
-    async def create_team(self, comp_id: str, team_data: Any) -> Dict:
-        return await self._request("POST", f"/teams/{comp_id}", json=self._dump(team_data))
-
-    async def join_team(self, team_id: str, join_data: Any) -> Dict:
-        return await self._request("POST", f"/teams/{team_id}/join", json=self._dump(join_data))
-
-    async def leave_team(self, team_id: str, user_id: str) -> Dict:
-        return await self._request("DELETE", f"/teams/{team_id}/leave/{user_id}")
 
     # --- 4. EXERCISES ---
     async def list_all_exercises(self) -> List[Dict]:
@@ -102,7 +89,7 @@ class InterpreterClient:
         return await self._request("DELETE", f"/exercises/{ex_id}")
 
     async def link_exercise_to_competition(self, ex_id: str, comp_id: str) -> Dict:
-        return await self._request("POST", f"/exercises/{ex_id}/link-competition/{comp_id}")
+        return await self._request("POST", f"/exercises/{ex_id}/competition/{comp_id}")
 
     async def link_exercise_to_tag(self, ex_id: str, tag_id: str) -> Dict:
         return await self._request("POST", f"/exercises/{ex_id}/tags/{tag_id}")
@@ -144,8 +131,8 @@ class InterpreterClient:
         return await self._request("DELETE", f"/tags/{tag_id}")
 
     # --- 8. ATTENDANCE ---
-    async def record_attendance(self, attendance_data: Any) -> Dict:
-        return await self._request("POST", "/attendance/", json=self._dump(attendance_data))
+    async def record_attendance(self, attendance_data: Any, user_id: str) -> Dict:
+        return await self._request("POST", "/attendance/", json=self._dump(attendance_data), params={"users_id": user_id})
 
     async def get_user_attendance(self, user_id: str) -> List[Dict]:
         return await self._request("GET", f"/attendance/{user_id}")
