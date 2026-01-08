@@ -64,7 +64,7 @@ class InterpreterClient:
         return await self._request("POST", "/competitions/", json=self._dump(comp_data))
 
     async def join_competition(self, invite_code: Any, user_id: str) -> Dict:
-        return await self._request("DELETE", f"/competitions/join", json=self._dump(invite_code), params={"user_id": user_id})
+        return await self._request("POST", f"/competitions/join", json=self._dump(invite_code), params={"user_id": user_id})
 
     async def update_competition(self, comp_id: str, update_data: Any) -> Dict:
         return await self._request("PATCH", f"/competitions/{comp_id}", json=self._dump(update_data))

@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 
 from app.schemas.competition import CompetitionCreateDTO, CompetitionReadDTO, CompetitionUpdateDTO, CompetitionJoinDTO
 from app.schemas.exercise import ExerciseReadDTO
+from app.schemas.user import UserBase
 from app.schemas.auth import AuthToken
 from app.middleware import get_current_user
 from app.services.interpreter_client import interpreter
@@ -25,7 +26,7 @@ async def get_competition(comp_id: str, user: AuthToken = Depends(get_current_us
         raise HTTPException(status_code=404, detail="Competição não encontrada")
     return comp
 
-@router.get("/{comp_id}/participants", response_model=List[CompetitionReadDTO])
+@router.get("/{comp_id}/participants", response_model=List[UserBase])
 async def list_competition_participants(comp_id: str, user: AuthToken = Depends(get_current_user)):
     """Lista os participantes inscritos nesta competição."""
     return await interpreter.get_competition_participants(comp_id)
@@ -33,17 +34,15 @@ async def list_competition_participants(comp_id: str, user: AuthToken = Depends(
 @router.get("/{comp_id}/exercises", response_model=List[ExerciseReadDTO])
 async def list_competition_exercises(comp_id: str, user: AuthToken = Depends(get_current_user)):
     """
-    Lista os exercícios apenas se o aluno:
-    1. Tiver registrado presença (Attendance).
-    2. Estiver em um time vinculado a esta competição.
+    Lista os exercícios apenas se o aluno estiver inscrito na competição.
     """
 
     if user.role == "admin":
         return await interpreter.get_competition_exercises(comp_id)
 
-    # 1. Verificar Presença
-    attendance = await interpreter.get_user_attendance(user.id)
-    if not any(a["competitions_id"] == comp_id for a in attendance):
+    participants = await interpreter.get_competition_participants(comp_id)
+    
+    if not any(p["id"] == user.id for p in participants):
         raise HTTPException(status_code=403, detail="Você deve entrar na competição primeiro")
 
     logger.info(f"Usuário {user.username} acessando exercícios da competição {comp_id}")
@@ -61,17 +60,16 @@ async def create_competition(payload: CompetitionCreateDTO, user: AuthToken = De
 @router.post("/join")
 async def join_competition(payload: CompetitionJoinDTO, user: AuthToken = Depends(get_current_user)):
     """
-    Valida o invite_code e registra a presença (Attendance).
+    Valida o invite_code e registra o usuário na competição.
     """
-    comp = await interpreter.get_competition(comp_id)
-    if not comp or comp["invite_code"] != payload.invite_code:
-        raise HTTPException(status_code=400, detail="Código de convite inválido")
 
-    attendance_data = {"users_id": user.id, "competitions_id": comp_id}
-    await interpreter.record_attendance(attendance_data)
+    try:
+        await interpreter.join_competition(payload, user.id)
+    except HTTPException as e:
+        raise e
 
-    logger.info(f"Usuário {user.username} entrou com sucesso na competição {comp_id}")
-    return {"message": "Inscrição confirmada. Agora você pode criar um novo time ou entrar em um time existente."}
+    logger.info(f"Usuário {user.username} entrou com sucesso na competição (via invite code)")
+    return {"message": "Inscrição confirmada com sucesso!"}
 
 @router.patch("/{comp_id}", response_model=CompetitionReadDTO)
 async def update_competition(comp_id: str, payload: CompetitionUpdateDTO, user: AuthToken = Depends(get_current_user)):

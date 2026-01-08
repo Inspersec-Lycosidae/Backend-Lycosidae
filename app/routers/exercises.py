@@ -45,9 +45,7 @@ async def submit_flag(payload: SolveSubmitDTO, user: AuthToken = Depends(get_cur
     Ponto central de validação de submissão.
     Validações:
     1. A competição existe e está ativa.
-    2. O utilizador pertence à equipe enviada no payload.
-    3. A equipe pertence à competição.
-    4. O exercício faz parte da competição.
+    2. O exercício faz parte da competição.
     """
     
     # 1. Validação da Competição e Janela Temporal

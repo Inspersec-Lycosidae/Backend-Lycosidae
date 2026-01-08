@@ -17,17 +17,16 @@ async def get_competition_scoreboard(comp_id: str, user: AuthToken = Depends(get
     
     Regras de Negócio:
     1. Administradores podem visualizar qualquer placar.
-    2. Alunos só podem visualizar o placar de competições onde possuem presença (Attendance) registrada.
+    2. Alunos só podem visualizar o placar de competições onde estão inscritos.
     """
     
-    # 1. Validação de Acesso para Alunos
     if user.role != "admin":
-        attendance = await interpreter.get_user_attendance(user.id)
-        is_registered = any(a["competitions_id"] == comp_id for a in attendance)
+        participants = await interpreter.get_competition_participants(comp_id)
+        is_registered = any(p["id"] == user.id for p in participants)
         
         if not is_registered:
             logger.warning(f"Usuário {user.username} tentou acessar o scoreboard da competição {comp_id} sem estar inscrito.")
-            raise HTTPException(status_code=403, detail="Você precisa estar inscrito nesta aula/competição para ver o placar.")
+            raise HTTPException(status_code=403, detail="Você precisa estar inscrito nesta competição para ver o placar.")
 
     logger.info(f"Usuário {user.username} acessando scoreboard da competição {comp_id}")
     
