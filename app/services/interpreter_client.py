@@ -42,7 +42,7 @@ class InterpreterClient:
         return await self._request("POST", "/auth/register", json=self._dump(user_data))
 
     async def update_user(self, user_id: str, update_data: Any) -> Dict:
-        return await self._request("PATCH", f"/auth/profile/{user_id}", json=self._dump(update_data))
+        return await self._request("PUT", f"/auth/profile/{user_id}", json=self._dump(update_data))
 
     async def delete_user(self, user_id: str) -> Dict:
         return await self._request("DELETE", f"/auth/profile/{user_id}")

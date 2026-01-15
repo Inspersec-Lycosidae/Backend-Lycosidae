@@ -91,7 +91,7 @@ async def logout():
     )
     return response
 
-@router.patch("/me", response_model=UserReadDTO)
+@router.put("/me", response_model=UserReadDTO)
 async def update_my_profile(payload: UserUpdateDTO, current_user: AuthToken = Depends(get_current_user)):
     """
     Permite ao utilizador atualizar os seus próprios dados (nome, senha, etc).
