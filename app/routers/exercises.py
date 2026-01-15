@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 from app.schemas.exercise import ExerciseCreateDTO, ExerciseReadDTO, ExerciseUpdateDTO, ExerciseAdminReadDTO
 from app.schemas.solve import SolveSubmitDTO, SolveResponseDTO, SolveReadDTO
 from app.schemas.tag import TagReadDTO, TagCreateDTO
+from app.schemas.competition import CompetitionReadDTO
 from app.schemas.auth import AuthToken
 from app.middleware import get_current_user
 from app.services.interpreter_client import interpreter
@@ -129,3 +130,22 @@ async def delete_exercise(ex_id: str, user: AuthToken = Depends(get_current_user
     if user.role != "admin":
         raise HTTPException(status_code=403, detail="Acesso negado")
     return await interpreter.delete_exercise(ex_id)
+
+@router.get("/{ex_id}/competitions", response_model=List[CompetitionReadDTO])
+async def get_exercise_competitions(ex_id: str, user: AuthToken = Depends(get_current_user)):
+    """Retorna as competições vinculadas a um exercício (Para o estado do Modal)."""
+    if user.role != "admin":
+        raise HTTPException(status_code=403, detail="Acesso negado")
+    return await interpreter.get_exercise_competitions(ex_id)
+
+@router.delete("/{ex_id}/competition/{comp_id}")
+async def unlink_from_competition(ex_id: str, comp_id: str, user: AuthToken = Depends(get_current_user)):
+    if user.role != "admin":
+        raise HTTPException(status_code=403, detail="Acesso negado")
+    return await interpreter.unlink_exercise_from_competition(ex_id, comp_id)
+
+@router.delete("/{ex_id}/tags/{tag_id}")
+async def unlink_from_tag(ex_id: str, tag_id: str, user: AuthToken = Depends(get_current_user)):
+    if user.role != "admin":
+        raise HTTPException(status_code=403, detail="Acesso negado")
+    return await interpreter.unlink_exercise_from_tag(ex_id, tag_id)

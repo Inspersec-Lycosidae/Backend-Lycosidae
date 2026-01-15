@@ -15,6 +15,7 @@ class InterpreterClient:
             try:
                 response = await client.request(method, endpoint, **kwargs)
                 if response.status_code == 404: return None
+                if response.status_code == 204: return None
                 if 400 <= response.status_code < 500:
                     detail = response.json().get("detail", "Erro na requisição ao Interpreter")
                     raise HTTPException(status_code=response.status_code, detail=detail)
@@ -26,7 +27,9 @@ class InterpreterClient:
 
     def _dump(self, data: Any):
         """Helper para serializar Pydantic models para JSON (com suporte a datetime)."""
-        return data.model_dump(mode='json') if hasattr(data, "model_dump") else data
+        if hasattr(data, "model_dump"):
+            return data.model_dump(mode='json', exclude_unset=True)
+        return data
 
     # --- 1. AUTH & USERS ---
     async def list_users(self) -> List[Dict]:
@@ -94,6 +97,15 @@ class InterpreterClient:
     async def link_exercise_to_tag(self, ex_id: str, tag_id: str) -> Dict:
         return await self._request("POST", f"/exercises/{ex_id}/tags/{tag_id}")
 
+    async def get_exercise_competitions(self, ex_id: str) -> List[Dict]:
+        return await self._request("GET", f"/exercises/{ex_id}/competitions")
+
+    async def unlink_exercise_from_competition(self, ex_id: str, comp_id: str) -> Dict:
+        return await self._request("DELETE", f"/exercises/{ex_id}/competition/{comp_id}")
+
+    async def unlink_exercise_from_tag(self, ex_id: str, tag_id: str) -> Dict:
+        return await self._request("DELETE", f"/exercises/{ex_id}/tags/{tag_id}")
+
     # --- 5. CONTAINERS ---
     async def list_containers(self) -> List[Dict]:
         return await self._request("GET", "/containers/")
@@ -129,6 +141,9 @@ class InterpreterClient:
 
     async def delete_tag(self, tag_id: str) -> Dict:
         return await self._request("DELETE", f"/tags/{tag_id}")
+
+    async def update_tag(self, tag_id: str, tag_data: Any) -> Dict:
+        return await self._request("PATCH", f"/tags/{tag_id}", json=self._dump(tag_data))
 
     # --- 8. ATTENDANCE ---
     async def record_attendance(self, attendance_data: Any, user_id: str) -> Dict:

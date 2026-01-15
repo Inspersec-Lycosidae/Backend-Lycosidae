@@ -41,3 +41,9 @@ async def delete_tag(tag_id: str, user: AuthToken = Depends(get_current_user)):
     
     logger.info(f"Admin {user.username} deletando tag ID: {tag_id}")
     return await interpreter.delete_tag(tag_id)
+
+@router.patch("/{tag_id}", response_model=TagReadDTO)
+async def update_tag(tag_id: str, payload: TagCreateDTO, user: AuthToken = Depends(get_current_user)):
+    if user.role != "admin":
+        raise HTTPException(status_code=403, detail="Acesso negado")
+    return await interpreter.update_tag(tag_id, payload)
