@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends, status
 from typing import List
-from datetime import datetime, timezone
+import asyncio
 
 from app.schemas.competition import CompetitionCreateDTO, CompetitionReadDTO, CompetitionUpdateDTO, CompetitionJoinDTO
 from app.schemas.exercise import ExerciseReadDTO
@@ -14,9 +14,34 @@ logger = get_logger(__name__)
 router = APIRouter(tags=["competitions"])
 
 @router.get("/", response_model=List[CompetitionReadDTO])
-async def list_competitions():
-    """Lista todas as competições disponíveis"""
-    return await interpreter.list_competitions()
+async def list_competitions(user: AuthToken = Depends(get_current_user)):
+    """
+    Lista as competições.
+    - Admin: Vê todas.
+    - Aluno: Vê apenas aquelas em que está inscrito.
+    """
+    all_competitions = await interpreter.list_competitions()
+
+    if user.role == "admin":
+        return all_competitions
+
+    my_competitions = []
+
+    async def check_participation(comp):
+        try:
+            participants = await interpreter.get_competition_participants(comp['id'])
+            if any(p['id'] == user.id for p in participants):
+                return comp
+        except Exception as e:
+            logger.error(f"Erro ao verificar participação na competição {comp['id']}: {e}")
+        return None
+
+    tasks = [check_participation(comp) for comp in all_competitions]
+    results = await asyncio.gather(*tasks)
+
+    my_competitions = [r for r in results if r is not None]
+
+    return my_competitions
 
 @router.get("/{comp_id}", response_model=CompetitionReadDTO)
 async def get_competition(comp_id: str, user: AuthToken = Depends(get_current_user)):

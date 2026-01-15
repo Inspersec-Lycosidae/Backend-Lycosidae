@@ -82,7 +82,13 @@ async def login(payload: LoginPayload):
 @router.post("/logout")
 async def logout():
     response = JSONResponse({"message": "Logged out"})
-    response.delete_cookie("session_token")
+    
+    response.delete_cookie(
+        key="session_token",
+        httponly=True,
+        secure=True, 
+        samesite="lax"
+    )
     return response
 
 @router.patch("/me", response_model=UserReadDTO)
