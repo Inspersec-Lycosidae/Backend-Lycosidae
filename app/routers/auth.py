@@ -97,3 +97,17 @@ async def update_my_profile(payload: UserUpdateDTO, current_user: AuthToken = De
     Permite ao utilizador atualizar os seus próprios dados (nome, senha, etc).
     """
     return await interpreter.update_user(current_user.id, payload)
+
+@router.put("/users/{user_id}", response_model=UserReadDTO)
+async def admin_update_user(user_id: str, payload: UserUpdateDTO, user: AuthToken = Depends(get_current_user)):
+    """Permite a um admin atualizar qualquer utilizador (ex: mudar cargo)."""
+    if user.role != "admin":
+        raise HTTPException(status_code=403, detail="Acesso negado")
+    return await interpreter.update_user(user_id, payload)
+
+@router.delete("/users/{user_id}", status_code=204)
+async def admin_delete_user(user_id: str, user: AuthToken = Depends(get_current_user)):
+    """Permite a um admin remover um utilizador."""
+    if user.role != "admin":
+        raise HTTPException(status_code=403, detail="Acesso negado")
+    return await interpreter.delete_user(user_id)
