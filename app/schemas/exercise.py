@@ -7,6 +7,7 @@ class ExerciseBase(BaseModel):
     description: Optional[str] = None
     difficulty: str
     points: int
+    docker_image: Optional[str] = None
     tags: List[TagReadDTO] = []
 
 class ExerciseCreateDTO(ExerciseBase):

@@ -116,8 +116,8 @@ class InterpreterClient:
     async def get_container_by_exercise(self, ex_id: str) -> Optional[Dict]:
         return await self._request("GET", f"/containers/exercise/{ex_id}")
 
-    async def register_container(self, container_data: Any) -> Dict:
-        return await self._request("POST", "/containers/", json=self._dump(container_data))
+    async def register_container(self, container_data: Any, exercises_id: str) -> Dict:
+        return await self._request("POST", "/containers/", json=self._dump(container_data), params={"exercises_id": exercises_id})
 
     async def remove_container(self, container_id: str) -> Dict:
         return await self._request("DELETE", f"/containers/{container_id}")

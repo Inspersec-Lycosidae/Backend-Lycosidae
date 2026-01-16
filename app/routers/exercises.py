@@ -6,10 +6,13 @@ from app.schemas.exercise import ExerciseCreateDTO, ExerciseReadDTO, ExerciseUpd
 from app.schemas.solve import SolveSubmitDTO, SolveResponseDTO, SolveReadDTO
 from app.schemas.tag import TagReadDTO, TagCreateDTO
 from app.schemas.competition import CompetitionReadDTO
+from app.schemas.container import ContainerInternalDTO
 from app.schemas.auth import AuthToken
 from app.middleware import get_current_user
 from app.services.interpreter_client import interpreter
+from app.services.orchester_client import orchester
 from app.logger import get_logger
+
 
 logger = get_logger(__name__)
 router = APIRouter(tags=["exercises"])
@@ -149,3 +152,41 @@ async def unlink_from_tag(ex_id: str, tag_id: str, user: AuthToken = Depends(get
     if user.role != "admin":
         raise HTTPException(status_code=403, detail="Acesso negado")
     return await interpreter.unlink_exercise_from_tag(ex_id, tag_id)
+
+@router.post("/{ex_id}/deploy/{comp_id}")
+async def deploy_exercise_infrastructure(ex_id: str, comp_id: str, user: AuthToken = Depends(get_current_user)):
+    """
+    Aciona o Orchester para subir o container do exercício e regista-o no Interpreter.
+    """
+    if user.role != "admin":
+        raise HTTPException(status_code=403, detail="Acesso negado")
+
+    # 1. Busca os dados do exercício e da competição
+    exercise = await interpreter.get_exercise(ex_id)
+    competition = await interpreter.get_competition(comp_id)
+
+    if not exercise or not exercise.get("docker_image"):
+        raise HTTPException(status_code=400, detail="Exercício sem imagem Docker configurada")
+
+    # 2. Prepara o pedido para o Orchester
+    orchester_payload = {
+        "image_link": exercise["docker_image"],
+        "time_alive": 0, # 0 para não desligar automaticamente (gerido pelo Admin)
+        "exercise_name": exercise["name"],
+        "competition_name": competition["name"],
+        "competition_uuid": comp_id
+    }
+
+    # 3. Chama o Orchester
+    logger.info(f"Solicitando deploy ao Orchester: {exercise['name']}")
+    orchestrator_resp = await orchester.start_container(orchester_payload)
+
+    # 4. Regista o container no Interpreter para que fique disponível para os alunos
+    container_data = ContainerInternalDTO(
+        docker_id=orchestrator_resp["container_id"],
+        image_tag=exercise["docker_image"],
+        port=orchestrator_resp["host_port"],
+        connection=orchestrator_resp["service_url"]
+    )
+
+    return await interpreter.register_container(container_data, ex_id)
