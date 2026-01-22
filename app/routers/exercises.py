@@ -6,7 +6,7 @@ from app.schemas.exercise import ExerciseCreateDTO, ExerciseReadDTO, ExerciseUpd
 from app.schemas.solve import SolveSubmitDTO, SolveResponseDTO, SolveReadDTO
 from app.schemas.tag import TagReadDTO, TagCreateDTO
 from app.schemas.competition import CompetitionReadDTO
-from app.schemas.container import ContainerInternalDTO
+from app.schemas.container import ContainerInternalDTO, ContainerRequestDTO
 from app.schemas.auth import AuthToken
 from app.middleware import get_current_user
 from app.services.interpreter_client import interpreter
@@ -153,8 +153,8 @@ async def unlink_from_tag(ex_id: str, tag_id: str, user: AuthToken = Depends(get
         raise HTTPException(status_code=403, detail="Acesso negado")
     return await interpreter.unlink_exercise_from_tag(ex_id, tag_id)
 
-@router.post("/{ex_id}/deploy/{comp_id}")
-async def deploy_exercise_infrastructure(ex_id: str, comp_id: str, user: AuthToken = Depends(get_current_user)):
+@router.post("/{ex_id}/deploy")
+async def deploy_exercise_infrastructure(ex_id: str, payload: ContainerRequestDTO, user: AuthToken = Depends(get_current_user)):
     """
     Aciona o Orchester para subir o container do exercício e regista-o no Interpreter.
     """
@@ -163,18 +163,15 @@ async def deploy_exercise_infrastructure(ex_id: str, comp_id: str, user: AuthTok
 
     # 1. Busca os dados do exercício e da competição
     exercise = await interpreter.get_exercise(ex_id)
-    competition = await interpreter.get_competition(comp_id)
-
+    
     if not exercise or not exercise.get("docker_image"):
         raise HTTPException(status_code=400, detail="Exercício sem imagem Docker configurada")
 
     # 2. Prepara o pedido para o Orchester
     orchester_payload = {
         "image_link": exercise["docker_image"],
-        "time_alive": 0, # 0 para não desligar automaticamente (gerido pelo Admin)
-        "exercise_name": exercise["name"],
-        "competition_name": competition["name"],
-        "competition_uuid": comp_id
+        "time_alive": payload.time_alive,
+        "exercise_name": exercise["name"]
     }
 
     # 3. Chama o Orchester

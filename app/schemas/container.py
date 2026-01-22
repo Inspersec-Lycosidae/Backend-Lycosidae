@@ -23,7 +23,6 @@ class ContainerInternalDTO(BaseModel):
 
 class ContainerRequestDTO(BaseModel):
     """
-    O que o Frontend envia para o Backend.
+    O que o Frontend envia para o Backend para solicitar deploy.
     """
-    exercises_id: str
-    competitions_id: str
+    time_alive: int = 0

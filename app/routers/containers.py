@@ -22,7 +22,7 @@ async def list_all_containers(user: AuthToken = Depends(get_current_user)):
             detail="Acesso negado: Requer privilégios de administrador"
         )
     
-    return await interpreter.list_all_containers()
+    return await interpreter.list_containers()
 
 @router.get("/{container_id}", response_model=ContainerReadDTO)
 async def get_container_details(container_id: str, user: AuthToken = Depends(get_current_user)):
@@ -54,7 +54,7 @@ async def register_container(payload: ContainerInternalDTO, exercises_id: str, u
         raise HTTPException(status_code=403, detail="Apenas administradores podem registrar novos containers")
     
     logger.info(f"Admin {user.username} registrando container para o exercício {exercises_id}")
-    return await interpreter.create_container(payload, exercises_id)
+    return await interpreter.register_container(payload, exercises_id)
 
 @router.delete("/{container_id}", status_code=204)
 async def remove_container(container_id: str, user: AuthToken = Depends(get_current_user)):
