@@ -39,3 +39,13 @@ class ExerciseAdminReadDTO(ExerciseReadDTO):
     """
 
     flag: str
+
+
+class ExerciseStudentReadDTO(ExerciseReadDTO):
+    """
+    Inclui o campo connection para infraestrutura compartilhada.
+    """
+    connection: Optional[str] = "" 
+
+    class Config:
+        from_attributes = True

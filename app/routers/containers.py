@@ -5,6 +5,7 @@ from app.schemas.container import ContainerReadDTO, ContainerInternalDTO
 from app.schemas.auth import AuthToken
 from app.middleware import get_current_user
 from app.services.interpreter_client import interpreter
+from app.services.orchester_client import orchester
 from app.logger import get_logger
 
 logger = get_logger(__name__)
@@ -66,3 +67,33 @@ async def remove_container(container_id: str, user: AuthToken = Depends(get_curr
     
     logger.info(f"Admin {user.username} removendo container {container_id}")
     return await interpreter.remove_container(container_id)
+
+@router.post("/sync")
+async def sync_infrastructure(user: AuthToken = Depends(get_current_user)):
+    if user.role != "admin":
+        raise HTTPException(status_code=403, detail="Acesso negado")
+    
+    recorded = await interpreter.list_containers()
+    cleaned = 0
+    
+    for c in recorded:
+        status = await orchester.get_container_status(c["docker_id"])
+        if not status.get("running"):
+            await interpreter.remove_container(c["id"])
+            cleaned += 1
+            
+    return {"status": "success", "cleaned_up": cleaned}
+
+@router.post("/callback")
+async def orchester_callback(payload: dict):
+    # O Orchester envia {"container_id": "...", "status": "expired"}
+    container_id = payload.get("container_id")
+    if container_id:
+        # Busca o ID interno no interpreter para remover
+        # (Idealmente você teria um método get_container_by_docker_id)
+        all_c = await interpreter.list_containers()
+        for c in all_c:
+            if c["docker_id"] == container_id:
+                await interpreter.remove_container(c["id"])
+                break
+    return {"message": "ok"}

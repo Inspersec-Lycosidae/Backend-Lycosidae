@@ -20,4 +20,14 @@ class OrchesterClient:
             except Exception as e:
                 raise HTTPException(status_code=503, detail=f"Orchester indisponível: {str(e)}")
 
+    async def get_container_status(self, docker_id: str):
+        async with httpx.AsyncClient(base_url=self.base_url, timeout=10.0) as client:
+            try:
+                response = await client.get(f"/orchester/status/{docker_id}")
+                if response.status_code == 200:
+                    return response.json()
+                return {"running": False}
+            except Exception:
+                return {"running": False}
+
 orchester = OrchesterClient()

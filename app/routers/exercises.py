@@ -171,7 +171,8 @@ async def deploy_exercise_infrastructure(ex_id: str, payload: ContainerRequestDT
     orchester_payload = {
         "image_link": exercise["docker_image"],
         "time_alive": payload.time_alive,
-        "exercise_name": exercise["name"]
+        "exercise_name": exercise["name"],
+        "callback_url": "http://backend:8000/containers/callback"
     }
 
     # 3. Chama o Orchester
