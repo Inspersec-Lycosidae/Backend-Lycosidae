@@ -1,50 +1,44 @@
-# main.py
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import router
-from app.logger import setup_logging
-import uvicorn
-import os
 
-"""
+# Importação dos módulos de router
+from app.routers import (auth, competitions, exercises, containers, tags, attendance, scoreboard)
+from app.logger import get_logger
 
-Entry point for Backend-Lycosidae service.
-Responsibilities:
-  - Initialize FastAPI
-  - Configure CORS
-  - Include routers
-  - Setup logging
+logger = get_logger(__name__)
 
-"""
+app = FastAPI(
+    title="Lycosidae Backend API",
+    description="API Gateway responsável pela orquestração e validação de regras de negócio do sistema Lycosidae CTF.",
+    version="1.1.0"
+)
 
-logger = setup_logging()
-
-app = FastAPI()
-logger.info("FastAPI application created")
-
-app.include_router(router)
-logger.info("Router included in application")
-
+# CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["http://localhost:3000"],
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
-    allow_credentials=True,
 )
-logger.info("CORS middleware configured")
 
-if __name__ == "__main__":
-    logger.info("Starting Backend-Lycosidae")
-    logger.info("Server will be available at http://0.0.0.0:8000")
-    logger.info("API documentation available at http://0.0.0.0:8000/docs")
-    
-    
-    # If on app folder, use relative import
-    if os.path.basename(os.getcwd()) == 'app':
-        logger.info("Running from app directory - using relative import")
-        uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
-    else:
-        # If on root folder, use absolute import
-        logger.info("Running from root directory - using absolute import")
-        uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True)
+# Registo de todos os Routers no sistema
+app.include_router(auth.router, prefix="/auth", tags=["auth"])
+app.include_router(competitions.router, prefix="/competitions", tags=["competitions"])
+app.include_router(exercises.router, prefix="/exercises", tags=["exercises"])
+app.include_router(containers.router, prefix="/containers", tags=["containers"])
+app.include_router(tags.router, prefix="/tags", tags=["tags"])
+app.include_router(attendance.router, prefix="/attendance", tags=["attendance"])
+app.include_router(scoreboard.router, prefix="/scoreboard", tags=["scoreboard"])
+
+@app.get("/", tags=["system"])
+def read_root():
+    return {"message": "Bem-vindo ao Lycosidae Gateway API"}
+
+@app.get("/healthy", description="Endpoint para verificação de saúde do sistema", tags=["system"])
+def health_check():
+    return {
+        "status": "healthy",
+        "service": "Backend-Lycosidae (Gateway)",
+        "version": "1.1.0"
+    }
